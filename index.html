@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网址导航</title>
+    <style>
+        :root {
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            --gradient-3: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --bg-light: #fafafa;
+            --card-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --card-hover-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            --visit-btn: #48bb78;
+            --copy-btn: #ed8936;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.5;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+            padding: 16px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            text-align: center;
+            margin: 32px 0 48px;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        /* 二维码区域 */
+        .qr-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 24px;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 40px;
+            box-shadow: var(--card-shadow);
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .qr-header:hover {
+            transform: translateY(-3px);
+        }
+
+        .qr-code img {
+            width: 140px;
+            height: 140px;
+            border-radius: 12px;
+            border: 4px solid #f0f4ff;
+            padding: 8px;
+        }
+
+        .qr-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .platform {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .apple {
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        .android {
+            background-color: #e6f4ea;
+            color: #34a853;
+        }
+
+        .platform-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .platform-text .title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .platform-text .version {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .platform-text a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .platform-text a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        /* 导航区域 */
+        .speed-section {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .speed-section:hover {
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        .section-title {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin: -24px -24px 24px -24px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--white);
+            letter-spacing: 0.5px;
+        }
+
+        .T001 .section-title { background: var(--gradient-1); }
+        .T002 .section-title { background: var(--gradient-2); }
+        .T003 .section-title { background: var(--gradient-3); }
+
+        .server-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            list-style: none;
+        }
+
+        .server-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .server-item:hover {
+            transform: translateX(5px);
+            background: #f0f4ff;
+            border-color: #e1e7ff;
+        }
+
+        .server-item span {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .visit-btn, .copy-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .visit-btn {
+            background: var(--visit-btn);
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .visit-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+
+        .copy-btn {
+            background: var(--copy-btn);
+            color: var(--white);
+        }
+
+        .copy-btn:hover {
+            background: #dd6b20;
+            transform: translateY(-2px);
+        }
+
+        /* 底部 */
+        .footer {
+            text-align: center;
+            padding: 40px 20px 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 48px;
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.75rem;
+                margin: 24px 0 32px;
+            }
+
+            .qr-code img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .server-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .btn-group {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .visit-btn, .copy-btn {
+                padding: 10px 20px;
+                width: 50%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .platform {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .visit-btn, .copy-btn {
+                width: 100%;
+            }
+        }
+    </style>
+    <!-- 引入图标库 -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">网址导航</h1>
+
+        <div class="qr-header">
+            <a href="https://www.16w.top/E5MQ" target="_blank" class="qr-code">
+                <img src="data:image/png;base64,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" alt="APP下载二维码">
+            </a>
+            <div class="qr-content">
+                <div class="platform">
+                    <i class="icon apple"><i class="fab fa-apple"></i></i>
+                    <div class="platform-text">
+                        <span class="title"><a href="https://www.16w.top/E5MQ" target="_blank">iOS 下载</a></span>
+                        <span class="version">支持 iOS 12 或以上版本</span>
+                    </div>
+                </div>
+                <div class="platform">
+                    <i class="icon android"><i class="fab fa-android"></i></i>
+                    <div class="platform-text">
+                        <span class="title"><a href="https://www.16w.top/E5MQ" target="_blank">Android 下载</a></span>
+                        <span class="version">支持安卓 7.0 或以上版本</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="speed-section T001">
+            <h2 class="section-title">B25加两字母.com</h2>
+            <ul class="server-list" id="T001"></ul>
+        </section>
+
+        <section class="speed-section T002">
+            <h2 class="section-title">B35加两字母.com</h2>
+            <ul class="server-list" id="T002"></ul>
+        </section>
+
+        <section class="speed-section T003">
+            <h2 class="section-title">B25、B35加两数字.com</h2>
+            <ul class="server-list" id="T003"></ul>
+        </section>
+    </div>
+
+    <script>
+        // 配置数据（保持原数据不变）
+        const servers = {
+            T001: [
+                'B25ff.com',
+                'B25gg.com',
+                'B25ww.com'
+            ],
+            T002: [
+                'B35bb.com',
+                'B35dd.com',
+                'B35gg.com'
+            ],
+            T003: [
+                'B2501.com',
+                'B2502.com',
+                'B3503.com',
+                'B3509.com'
+            ],
+        };
+
+        // 初始化DOM
+        function initDom() {
+            for (const [group, domains] of Object.entries(servers)) {
+                const list = document.getElementById(group);
+                domains.forEach(domain => {
+                    const li = document.createElement('li');
+                    li.className = 'server-item';
+                    li.innerHTML = `
+                        <span>${domain}</span>
+                        <div class="btn-group">
+                            <button class="copy-btn"><i class="fas fa-copy mr-1"></i> 复制网址</button>
+                            <a href="http://${domain}" target="_blank" class="visit-btn"><i class="fas fa-external-link-alt mr-1"></i> 访问网站</a>
+                        </div>
+                    `;
+                    list.appendChild(li);
+                });
+            }
+
+            // 添加复制功能
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const domain = btn.closest('.server-item').querySelector('span').textContent;
+                    navigator.clipboard.writeText(domain)
+                        .then(() => {
+                            // 复制成功提示优化
+                            const originalText = btn.innerHTML;
+                            btn.innerHTML = '<i class="fas fa-check mr-1"></i> 已复制';
+                            btn.style.background = '#38a169';
+                            setTimeout(() => {
+                                btn.innerHTML = originalText;
+                                btn.style.background = 'var(--copy-btn)';
+                            }, 1500);
+                        })
+                        .catch(() => alert('复制失败，请手动复制'));
+                });
+            });
+        }
+
+        // 初始化
+        initDom();
+    </script>
+
+    <div class="footer">
+        Copyright © 2026 网址导航 | 本页面仅供导航使用
+    </div>
+</body>
+</html>
